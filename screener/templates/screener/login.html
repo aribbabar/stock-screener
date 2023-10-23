@@ -1,0 +1,14 @@
+{% extends "screener/base.html" %}
+{% load static %}
+
+{% block styling %}
+  <link rel="stylesheet" href="{% static 'screener/css/login.css' %}">
+{% endblock styling %}
+
+{% block content %}
+  <form method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Login</button>
+  </form>
+{% endblock content %}

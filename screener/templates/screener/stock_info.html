@@ -1,0 +1,29 @@
+{% extends "screener/base.html" %}
+{% load static %}
+
+{% block styling %}
+  <link rel="stylesheet" href="{% static 'screener/css/stock_info_styles.css' %}">
+{% endblock styling %}
+
+{% block content %}
+  <section>
+    <div class="container">
+      <h2>{{ stock_name }}</h2>
+      <div class="finances-container">
+        <em data-field="stock_price">{{ stock_price }}</em>
+        <em data-field="stock_change_value">{{ stock_change_value }}</em>
+        <em data-field="stock_change_percent">{{ stock_change_percent }}</em>
+      </div>
+      <form method="POST" action="{% url 'screener:add_stock' stock_id %}">
+        {% csrf_token %}
+        {% if stock_exists %}
+          <button type="submit" name="remove">Remove</button>
+        {% else %}
+          <button type="submit" name="add">Add</button>
+        {% endif %}
+      </form>
+    </div>
+  </section>
+
+  <script src="{% static "screener/js/stock_info.js" %}"></script>
+{% endblock content %}

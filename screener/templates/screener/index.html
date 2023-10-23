@@ -1,0 +1,18 @@
+{% extends "screener/base.html" %}
+{% load static %}
+
+{% block styling %}
+  <link rel="stylesheet" href="{% static 'screener/css/index_styles.css' %}">
+{% endblock styling %}
+
+{% block content %}
+  <form>
+    <div class="serach-box-container">
+      <input type="text" placeholder="Search ticker" onkeyup="search(event)">
+      <ul class="search-results-list"></ul>
+    </div>
+    <button type="submit">Go</button>
+  </form>
+
+  <script src="{% static "screener/js/search.js" %}"></script>
+{% endblock content %}
