@@ -5,21 +5,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chalky's Stock Screener</title>
+    
     <link rel="stylesheet" href="{% static 'screener/css/global.css' %}" />
+    <link rel="icon" href="{% static 'screener/favicon.png' %}" type="image/x-icon">
     {% block styling %}{% endblock styling %}
   </head>
   <body>
     <nav>
-      <a href="{% url 'screener:index' %}"><h1>Chalky's Stock Screener</h1></a>
-      <div class="links">
-        {% if user.is_authenticated %}
-          <a href="{% url 'screener:my_stocks' %}">My Stocks</a>
-          <a href="{% url 'screener:logout' %}">Logout</a>
-        {% else %}
-          <a href="{% url 'screener:login' %}">Login</a>
-          <a href="{% url 'screener:register' %}">Register</a>
-        {% endif %}
-      </div>
+        <a href="{% url 'screener:index' %}"><h1>Chalky's Stock Screener</h1></a>
+        <div>
+          {% if user.is_authenticated %}
+            <a href="{% url 'screener:my_stocks' %}">My Stocks</a>
+            <a href="{% url 'screener:logout' %}">Logout</a>
+          {% else %}
+            <a href="{% url 'screener:login' %}">Login</a>
+            <a href="{% url 'screener:register' %}">Register</a>
+          {% endif %}
+        </div>
     </nav>
     {% block content %}{% endblock content %}
   </body>

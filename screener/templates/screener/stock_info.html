@@ -2,28 +2,70 @@
 {% load static %}
 
 {% block styling %}
-  <link rel="stylesheet" href="{% static 'screener/css/stock_info_styles.css' %}">
+  <link rel="stylesheet" href="{% static 'screener/css/stock_info.css' %}">
 {% endblock styling %}
 
 {% block content %}
-  <section>
-    <div class="container">
+  <div class="container">
+    <div class="heading-container">
       <h2>{{ stock_name }}</h2>
       <div class="finances-container">
         <em data-field="stock_price">{{ stock_price }}</em>
         <em data-field="stock_change_value">{{ stock_change_value }}</em>
         <em data-field="stock_change_percent">{{ stock_change_percent }}</em>
       </div>
-      <form method="POST" action="{% url 'screener:add_stock' stock_id %}">
-        {% csrf_token %}
-        {% if stock_exists %}
-          <button type="submit" name="remove">Remove</button>
-        {% else %}
-          <button type="submit" name="add">Add</button>
-        {% endif %}
-      </form>
     </div>
-  </section>
+    <div class="horizontal-line"></div>
+    <div class="summary-container">
+      <div class="summary-box-container">
+        <span>Previous Close</span><span>{{ previous_close }}</span>
+      </div>
+      <div class="summary-box-container">
+        <span>Market Cap</span><span>{{ market_cap }}</span>
+      </div>
+      <div class="summary-box-container">
+        <span>Open</span><span>{{ open }}</span>
+      </div>
+      <div class="summary-box-container">
+        <span>Beta (5Y Monthly)</span><span>{{ beta }}</span>
+      </div>
+      <div class="summary-box-container">
+        <span>Bid</span><span>{{ bid }}</span>
+      </div>
+      <div class="summary-box-container">
+        <span>PE Ratio (TTM)</span><span>{{ pe_ratio }}</span>
+      </div>
+      <div class="summary-box-container">
+        <span>Ask</span><span>{{ ask }}</span>
+      </div>
+      <div class="summary-box-container">
+        <span>EPS (TTM)</span><span>{{ eps }}</span>
+      </div>
+      <div class="summary-box-container">
+        <span>Day's Range</span><span>{{ days_range }}</span>
+      </div>
+      <div class="summary-box-container">
+        <span>Earnings Date</span><span>{{ earnings_date }}</span>
+      </div>
+      <div class="summary-box-container">
+        <span>52 Week Range</span><span>{{ fifty_two_week_range }}</span>
+      </div>
+      <div class="summary-box-container">
+        <span>Volume</span><span>{{ volume }}</span>
+      </div>
+      <div class="summary-box-container">
+        <span>Avg. Volume</span><span>{{ average_volume }}</span>
+      </div>
+    </div>
+    <form method="POST" action="{% url 'screener:add_stock' stock_id %}">
+      {% csrf_token %}
+      {% if stock_exists and user.is_authenticated  %}
+        <button type="submit" name="remove">Remove</button>
+      {% elif user.is_authenticated %}
+        <button type="submit" name="add">Add</button>
+      {% endif %}
+    </form>
+  </div>
 
   <script src="{% static "screener/js/stock_info.js" %}"></script>
 {% endblock content %}

@@ -1,11 +1,20 @@
 form {
+  min-width: 200px;
+  max-width: 800px;
+  margin: 0 auto;
   padding: 1rem;
   display: flex;
   justify-content: center;
   gap: 0.5rem;
 }
 
+.serach-box-container {
+  width: 100%;
+  position: relative;
+}
+
 .serach-box-container > input {
+  width: 100%;
   padding: 0.5rem;
   border: 1px solid #000;
 }
@@ -17,10 +26,6 @@ form > button {
   border: 0;
   border-radius: 12px;
   cursor: pointer;
-}
-
-.serach-box-container {
-  position: relative;
 }
 
 .search-results-list {

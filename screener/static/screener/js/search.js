@@ -38,7 +38,7 @@ function search(e) {
 
         const btn_element = document.createElement("button");
         btn_element.type = "submit";
-        btn_element.innerText = `${search_result.substring(0, 25)}...`;
+        btn_element.innerText = `${search_result.substring(0, 40)}...`;
 
         li_wrapper_element.appendChild(btn_element);
 

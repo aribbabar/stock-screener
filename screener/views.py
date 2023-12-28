@@ -1,3 +1,4 @@
+
 import requests
 from bs4 import BeautifulSoup
 from django.contrib.auth import authenticate, get_user_model
@@ -18,39 +19,99 @@ def index(request: HttpRequest):
 
 
 def stock_info(request: HttpRequest, symbol: str):
-    URL = "https://finance.yahoo.com/quote/" + symbol
+    stock_url = f"https://finance.yahoo.com/quote/{symbol}"
+    page = requests.get(stock_url)
 
-    page = requests.get(URL)
+    if page.status_code == 404:
+        return render(request, "screener/404.html")
+
     soup = BeautifulSoup(page.content, "html.parser")
 
-    stock_id = Stock.objects.filter(symbol=symbol)[0].id
+    stock_id = Stock.objects.get(symbol=symbol).id
     stock_name = soup.find(name="h1", class_="D(ib) Fz(18px)").text
     stock_price = soup.find(name="fin-streamer", class_="Fw(b) Fz(36px) Mb(-4px) D(ib)",
                             attrs={"data-field": "regularMarketPrice"}).text
-    stock_change_value = soup.find(name="fin-streamer", class_="Fw(500) Pstart(8px) Fz(24px)", attrs={
-                                   "data-field": "regularMarketChange"}).findChild("span").text
+    stock_change_value = soup.find(name="fin-streamer", class_="Fw(500) Pstart(8px) Fz(24px)",
+                                   attrs={"data-field": "regularMarketChange"}).findChild("span").text
     stock_change_percent = soup.find(name="fin-streamer", class_="Fw(500) Pstart(8px) Fz(24px)", attrs={
-                                     "data-field": "regularMarketChangePercent"}).findChild("span").text
+        "data-field": "regularMarketChangePercent"}).findChild("span").text
+    previous_close = soup.find(name="td", class_="Ta(end) Fw(600) Lh(14px)", attrs={
+        "data-test": "PREV_CLOSE-value"}).text
+    open = soup.find(name="td", class_="Ta(end) Fw(600) Lh(14px)", attrs={
+        "data-test": "OPEN-value"}).text
+    bid = soup.find(name="td", class_="Ta(end) Fw(600) Lh(14px)", attrs={
+        "data-test": "BID-value"}).text
+    ask = soup.find(name="td", class_="Ta(end) Fw(600) Lh(14px)", attrs={
+        "data-test": "ASK-value"}).text
+    days_range = soup.find(name="td", class_="Ta(end) Fw(600) Lh(14px)", attrs={
+        "data-test": "DAYS_RANGE-value"}).text
+    fifty_two_week_range = soup.find(name="td", class_="Ta(end) Fw(600) Lh(14px)", attrs={
+        "data-test": "FIFTY_TWO_WK_RANGE-value"}).text
+    volume = soup.find(name="fin-streamer",
+                       attrs={"data-field": "regularMarketVolume"})["value"]
+    average_volume = soup.find(name="td", class_="Ta(end) Fw(600) Lh(14px)", attrs={
+        "data-test": "AVERAGE_VOLUME_3MONTH-value"}).text
+    market_cap = soup.find(name="td", class_="Ta(end) Fw(600) Lh(14px)", attrs={
+        "data-test": "MARKET_CAP-value"}).text
+    beta = soup.find(name="td", class_="Ta(end) Fw(600) Lh(14px)", attrs={
+        "data-test": "BETA_5Y-value"}).text
+    pe_ratio = soup.find(name="td", class_="Ta(end) Fw(600) Lh(14px)", attrs={
+        "data-test": "PE_RATIO-value"}).text
+    eps = soup.find(name="td", class_="Ta(end) Fw(600) Lh(14px)", attrs={
+        "data-test": "EPS_RATIO-value"}).text
+    earnings_date = soup.find(name="td", class_="Ta(end) Fw(600) Lh(14px)", attrs={
+        "data-test": "EARNINGS_DATE-value"}).text
+    one_year_target = soup.find(name="td", class_="Ta(end) Fw(600) Lh(14px)", attrs={
+        "data-test": "ONE_YEAR_TARGET_PRICE-value"}).text
 
     context = {
         "stock_id": stock_id,
         "stock_name": stock_name,
         "stock_price": stock_price,
         "stock_change_value": stock_change_value,
-        "stock_change_percent": stock_change_percent
+        "stock_change_percent": stock_change_percent,
+        "previous_close": previous_close,
+        "open": open,
+        "bid": bid,
+        "ask": ask,
+        "days_range": days_range,
+        "fifty_two_week_range": fifty_two_week_range,
+        "volume": volume,
+        "average_volume": average_volume,
+        "market_cap": market_cap,
+        "beta": beta,
+        "pe_ratio": pe_ratio,
+        "eps": eps,
+        "earnings_date": earnings_date,
+        "one_year_target": one_year_target
     }
 
     # context = {
-    #     "stock_id": stock_id,
-    #     "stock_name": "Meta Platforms, Inc. (META)",
-    #     "stock_price": "321.15",
-    #     "stock_change_value": "+6.46",
-    #     "stock_change_percent": "(+2.05%)"
+    #     "stock_id": "1",
+    #     "stock_name": "AAPL",
+    #     "stock_price": "173.00",
+    #     "stock_change_value": "+0.12",
+    #     "stock_change_percent": "(+0.07%)",
+    #     "previous_close": "172.88",
+    #     "open": "170.91",
+    #     "bid": "172.93 x 1100",
+    #     "ask": "173.01 x 1000",
+    #     "days_range": "169.94 - 174.01",
+    #     "fifty_two_week_range": "124.17 - 198.23",
+    #     "volume": "55,856,506",
+    #     "average_volume": "58,053,110",
+    #     "market_cap": "2.705T",
+    #     "beta": "1.31",
+    #     "pe_ratio": "29.03",
+    #     "eps": "5.96",
+    #     "earnings_date": "Nov 02, 2023",
+    #     "forward_dividend_and_yield": "0.96 (0.56%)",
+    #     "ex_dividend_date": "Aug 11, 2023",
+    #     "target_mean": "187.73"
     # }
 
     if request.user.is_authenticated:
         user_id = request.user.id
-        stock_id = Stock.objects.filter(symbol=symbol)[0].id
 
         if UserStock.objects.filter(user=user_id).filter(stock=stock_id):
             context["stock_exists"] = True
@@ -137,6 +198,7 @@ def login(request: HttpRequest):
     return render(request, "screener/login.html", {"form": form})
 
 
+@login_required
 def logout(request: HttpRequest):
     if request.user.is_authenticated:
         auth_logout(request)

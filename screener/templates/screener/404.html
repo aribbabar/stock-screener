@@ -1,0 +1,10 @@
+{% extends "screener/base.html" %}
+{% load static %}
+
+{% block styling %}
+  <link rel="stylesheet" href="{% static 'screener/css/404.css' %}">
+{% endblock styling %}
+
+{% block content %}
+  <p>Oops... The page you're looking for is not here.</p>
+{% endblock content %}
