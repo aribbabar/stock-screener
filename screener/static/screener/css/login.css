@@ -1,3 +1,15 @@
+.success {
+  padding: 1rem;
+  text-align: center;
+  color: green;
+}
+
+.error {
+  padding: 1rem;
+  text-align: center;
+  color: red;
+}
+
 form {
   margin: 1rem 0;
   display: flex;

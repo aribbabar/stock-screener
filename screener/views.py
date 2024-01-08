@@ -1,6 +1,7 @@
 
 import requests
 from bs4 import BeautifulSoup
+from django.contrib import messages
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
@@ -169,6 +170,11 @@ def register(request: HttpRequest):
 
             User.objects.create_user(username=username, email=email,
                                      password=password, first_name=first_name, last_name=last_name)
+
+            messages.add_message(request, messages.SUCCESS,
+                                 "Account created successfully!")
+
+            return redirect("screener:login")
         else:
             print(form.errors)
 
@@ -193,6 +199,8 @@ def login(request: HttpRequest):
 
                 return redirect("screener:index")
             else:
+                messages.add_message(request, messages.ERROR,
+                                     "Invalid username/password")
                 print("Invalid username/password", user)
 
     return render(request, "screener/login.html", {"form": form})
