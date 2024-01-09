@@ -11,6 +11,11 @@ form > * {
   border-radius: 12px;
 }
 
+form > div > input {
+  padding: 0.5rem;
+  border-radius: 12px;
+}
+
 form > button {
   background-color: #000;
   color: #fff;
