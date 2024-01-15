@@ -144,7 +144,9 @@ def search(request: HttpRequest, search_term: str):
     if len(symbols) < 5:
         security_names = Stock.objects.filter(
             security_name__contains=search_term).values()[:5]
-        formatted_results = formatted_results + [f"{entry['symbol']} | {entry['security_name']}" for entry in security_names]
+        formatted_results = formatted_results + \
+            [f"{entry['symbol']} | {entry['security_name']
+                                    }" for entry in security_names]
         # to remove duplicates while maintaing the order
         formatted_results = remove_duplicates(formatted_results)
 
@@ -200,6 +202,8 @@ def login(request: HttpRequest):
                 messages.add_message(request, messages.ERROR,
                                      "Invalid username/password")
                 print("Invalid username/password", user)
+        else:
+            print(form.errors)
 
     return render(request, "screener/login.html", {"form": form})
 

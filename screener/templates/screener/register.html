@@ -6,9 +6,11 @@
 {% endblock styling %}
 
 {% block content %}
-  <form method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Register</button>
-  </form>
+  <div class="wrapper">
+    <form method="POST">
+      {% csrf_token %}
+      {{ form }}
+      <button type="submit">Register</button>
+    </form>
+  </div>
 {% endblock content %}

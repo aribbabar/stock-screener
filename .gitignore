@@ -1,5 +1,5 @@
 .vs
 .vscode
-.config.json
+config.json
 
 __pycache__
