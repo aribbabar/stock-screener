@@ -145,8 +145,7 @@ def search(request: HttpRequest, search_term: str):
         security_names = Stock.objects.filter(
             security_name__contains=search_term).values()[:5]
         formatted_results = formatted_results + \
-            [f"{entry['symbol']} | {entry['security_name']
-                                    }" for entry in security_names]
+            [f"{entry['symbol']} | {entry['security_name']}" for entry in security_names]
         # to remove duplicates while maintaing the order
         formatted_results = remove_duplicates(formatted_results)
 
